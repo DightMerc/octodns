@@ -90,7 +90,7 @@ class Manager(object):
 
     def __init__(
         self,
-        config_file,
+        yaml_config,
         max_workers=None,
         include_meta=False,
         auto_arpa=False,
@@ -98,14 +98,12 @@ class Manager(object):
     ):
         version = self._try_version('octodns', version=__version__)
         self.log.info(
-            '__init__: config_file=%s, (octoDNS %s)', config_file, version
+            '__init__: yaml_config=%s, (octoDNS %s)', yaml_config, version
         )
 
         self._configured_sub_zones = None
 
-        # Read our config file
-        with open(config_file, 'r') as fh:
-            self.config = safe_load(fh, enforce_order=False)
+        self.config = safe_load(yaml_config, enforce_order=False)
 
         zones = self.config['zones']
         self.config['zones'] = self._config_zones(zones)
